@@ -52,12 +52,5 @@
             "protocol": "MQTTS",
             "keyfile": ""
         }
-    },
-    "meeting": {
-        "sessionid": false,
-        "sessionname": "",
-        "recording": false,
-        "localrecording": false,
-        "remoterecording": false
     }
 }
