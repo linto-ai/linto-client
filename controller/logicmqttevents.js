@@ -93,68 +93,6 @@ function logicMqttEvents(app) {
             }, 0, false, true)
         }
 
-        // Meetinf record management
-        if (!!payload.topicArray && payload.topicArray[3] === "managemeeting") {
-            //{ "action": "start_recording|stop_recording|status", "target": { "videofile": "path", "audiofile": "path" } }
-            const localMqttMessage = {} // would ge sent to the recorder through local mqtt
-            switch (payload.command) {
-                case "startlocalrecording":
-                    //if "meeting" key is missing in local configuration
-                    if (!app.terminal.info.meeting) {
-                        app.terminal.info.meeting = {
-                            "sessionid": false,
-                            "sessionname": "",
-                            "recording": false,
-                            "localrecording": false,
-                            "remoterecording": false
-                        }
-                    }
-                    //If not recording, ends this function
-                    if (!!app.terminal.info.meeting.recording) return console.error("Cannot start recording, i'm currently recording")
-                    debug(`Starting recording localy`)
-                    try {
-                        app.terminal.info.meeting.sessionid = new Date().toJSON() + app.terminal.info.sn
-                        app.terminal.info.meeting.sessionname = payload.sessionname
-                        app.terminal.info.meeting.recording = true
-                        app.terminal.info.meeting.localrecording = true
-                        let meetingFilesPath = await app.terminal.getLocalMeetingFilesPath(payload.sessionname)
-                        //adds date in recording path
-                        meetingFilesPath = meetingFilesPath + "-" + new Date().toJSON()
-                        localMqttMessage.action = "start_recording"
-                        localMqttMessage.target = {
-                            "videofile": `${meetingFilesPath}/video.avi`,
-                            "audiofile": `${meetingFilesPath}/audio.wav`
-                        }
-                        app.localmqtt.publish("recorder", localMqttMessage, 0, false, true)
-                        await app.terminal.save() // dumps linto.json down to disk
-                        app.logicmqtt.publishStatus()
-                    } catch (e) {
-                        console.error(`Unable to start meeting record : ${e}`)
-                    }
-                    break
-                case "stoplocalrecording":
-                    debug(`Stopping recording localy`)
-                    try {
-                        localMqttMessage.action = "stop_recording"
-                        app.localmqtt.publish("recorder", localMqttMessage, false, true)
-                        if (!app.terminal.info.meeting.recording) return console.error("Cannot stop recording, i'm not recording")
-                        app.terminal.info.meeting.sessionid = false
-                        app.terminal.info.meeting.sessionname = ""
-                        app.terminal.info.meeting.recording = false
-                        app.terminal.info.meeting.localrecording = true
-                        app.localmqtt.publish("recorder", localMqttMessage, 0, false, true)
-                        await app.terminal.save() // dumps linto.json down to disk
-                        app.logicmqtt.publishStatus()
-                    } catch (e) {
-                        console.error(`Unable to stop meeting record : ${e}`)
-                    }
-                    break
-                default:
-                    console.error(`managemeeting received, missing parameters`)
-                    return
-            }
-        }
-
         /******************
          * Audio handlings
          ******************/

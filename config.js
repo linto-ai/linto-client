@@ -24,8 +24,6 @@ function configureDefaults() {
         process.env.LOCAL_MQTT_KEEP_ALIVE = ifHas(process.env.LOCAL_MQTT_KEEP_ALIVE, envdefault.LOCAL_MQTT_KEEP_ALIVE)
         process.env.LOCAL_MQTT_ADDRESS = ifHas(process.env.LOCAL_MQTT_ADDRESS, envdefault.LOCAL_MQTT_ADDRESS)
         process.env.LOCAL_MQTT_PORT = ifHas(process.env.LOCAL_MQTT_PORT, envdefault.LOCAL_MQTT_PORT)
-        process.env.MEETING_FILES_ROOT_DIR = ifHas(process.env.MEETING_FILES_ROOT_DIR, envdefault.MEETING_FILES_ROOT_DIR)
-        process.env.MEETING_FILES_ROOT_DIR_FAILBACK = ifHas(process.env.MEETING_FILES_ROOT_DIR_FAILBACK, envdefault.MEETING_FILES_ROOT_DIR_FAILBACK)
 
     } catch (e) {
         console.error(debug.namespace, e)

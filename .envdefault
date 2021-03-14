@@ -9,7 +9,3 @@ LOCAL_MQTT_KEEP_ALIVE = 15
 # Audio and Mic
 AUDIO_FILE = /tmp/command.raw
 TTS_LANG = fr-FR,en-US,en-GB,es-ES,de-DE,it-IT
-
-# Local meeting Recording
-MEETING_FILES_ROOT_DIR = /media
-MEETING_FILES_ROOT_DIR_FAILBACK = /home/pi
