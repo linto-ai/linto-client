@@ -105,18 +105,18 @@ function logicMqttEvents(app) {
                 if (!!payload.behavior.say) {
                     debug("conversationData reset")
                     app.conversationData = {}
-                    debug(`Saying : ${payload.behavior.say}`)
+                    debug(`Saying : ${payload.behavior.say.text}`)
                     app.localmqtt.publish("say", {
-                        "value": payload.behavior.say,
+                        "value": payload.behavior.say.text,
                         "on": new Date().toJSON()
                     }, 0, false, true)
                     // Conversational mode
                 } else if (!!payload.behavior.ask && !!payload.behavior.conversationData) {
                     app.conversationData = payload.behavior.conversationData
                     debug("conversationData sets to : " + app.conversationData)
-                    debug(`asking : ${payload.behavior.ask}`)
+                    debug(`asking : ${payload.behavior.ask.text}`)
                     app.localmqtt.publish("ask", {
-                        "value": payload.behavior.ask,
+                        "value": payload.behavior.ask.text,
                         "on": new Date().toJSON()
                     }, 0, false, true)
                 }
